@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - angrybirds@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+    <schema id="1" name="angrybirds">
+      <visible>1</visible>
+    </schema>
+    <schema id="2" name="clinic"/>
+    <schema id="3" name="forum"/>
+    <schema id="4" name="information_schema"/>
+    <schema id="5" name="mysql"/>
+    <schema id="6" name="parsing"/>
+    <schema id="7" name="performance_schema"/>
+    <schema id="8" name="sys"/>
+    <table id="9" parent="1" name="user"/>
+    <column id="10" parent="9" name="id">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+      <sequence-identity>1</sequence-identity>
+    </column>
+    <column id="11" parent="9" name="login">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="12" parent="9" name="password">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <column id="13" parent="9" name="email">
+      <data-type>varchar(255)|0</data-type>
+    </column>
+    <key id="14" parent="9" name="PRIMARY">
+      <columns>id</columns>
+      <primary>1</primary>
+    </key>
+  </database-model>
+</dataSource>
