@@ -1,5 +1,7 @@
 package ru.mail.park.main;
 
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @SuppressWarnings({"unused", "MVCPathVariableInspection"})
 public class RegistrationController {
+
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(RegistrationController.class);
 
     private final AccountService accountService;
     private final SessionService sessionService;
@@ -98,14 +102,20 @@ public class RegistrationController {
             return status(HttpStatus.BAD_REQUEST).body("{\"message\":\"Fields cannot be empty\"}");
         }
 
-        final UserEntity existingUser = accountService.getUser(login);
+        try {
+            final UserEntity existingUser = accountService.getUser(login);
 
-        if (existingUser != null) {
-            return status(HttpStatus.BAD_REQUEST).body("{\"message\":\"User already exists\"}");
+            if (existingUser != null) {
+                return status(HttpStatus.BAD_REQUEST).body("{\"message\":\"User already exists\"}");
+            }
+
+            final long id = accountService.addUser(login, password, email).getId();
+            return ResponseEntity.ok(new SuccessResponse(id));
+
+        } catch (Exception ex) {
+            logger.error("Cannot add user", ex);
+            throw ex;
         }
-
-        final long id = accountService.addUser(login, password, email).getId();
-        return ResponseEntity.ok(new SuccessResponse(id));
     }
 
     @RequestMapping(path = "api/user/{id}", method = RequestMethod.GET)
